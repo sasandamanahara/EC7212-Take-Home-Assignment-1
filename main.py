@@ -18,20 +18,14 @@ def average_filter(image, kernel_size):
     return cv2.blur(image, (kernel_size, kernel_size))
 
 # -------- Task 3: Rotate Image -------- #
+
 def rotate_image(image, angle):
     (h, w) = image.shape[:2]
-    M = cv2.getRotationMatrix2D((w/2, h/2), angle, 1.0)
-    cos = np.abs(M[0, 0])
-    sin = np.abs(M[0, 1])
-
-    new_w = int((h * sin) + (w * cos))
-    new_h = int((h * cos) + (w * sin))
-
-    M[0, 2] += (new_w / 2) - (w / 2)
-    M[1, 2] += (new_h / 2) - (h / 2)
-
-    rotated = cv2.warpAffine(image, M, (new_w, new_h), borderMode=cv2.BORDER_REFLECT)
+    center = (w // 2, h // 2)
+    M = cv2.getRotationMatrix2D(center, angle, 1.0)
+    rotated = cv2.warpAffine(image, M, (w, h), borderMode=cv2.BORDER_REFLECT)
     return rotated
+
 
 # -------- Task 4: Block Averaging to Reduce Resolution -------- #
 def block_average(image, block_size):
